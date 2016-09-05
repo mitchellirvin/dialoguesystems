@@ -126,11 +126,11 @@ totalContaining = uttersContaining2 + uttersContaining1
 totalNotContaining = uttersNotContaining2 + uttersNotContaining1
 
 print("\n---------------------------------------------------\nBEGIN HW 2")
-print("\t\t\t\tw/ " + wordToTrack + "\t\t\t\tw/o  " + wordToTrack + "\t\t\tTotal")
+print("\t\t\t\tw/ " + wordToTrack + "\t\t\tw/o  " + wordToTrack + "\t\t\tTotal")
 print("Sp. 1\t\t\t" + str(uttersContaining1) + "\t\t\t\t\t" + str(uttersNotContaining1) + "\t\t\t\t\t" + str(turns1))
 print("Sp. 2\t\t\t" + str(uttersContaining2) + "\t\t\t\t\t" + str(uttersNotContaining2) + "\t\t\t\t\t" + str(turns2))
 print("Total \t\t\t" + str(uttersContaining2 + uttersContaining1) + "\t\t\t\t\t" +
-      str(uttersNotContaining1 + uttersNotContaining2))
+      str(uttersNotContaining1 + uttersNotContaining2) + "\t\t\t\t\t" + str(turns1 + turns2))
 
 
 
