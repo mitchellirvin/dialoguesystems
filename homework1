@@ -4,56 +4,62 @@ from nltk.tokenize import word_tokenize
 text_file = open("script.txt", mode="r")
 linkedsentences = list(text_file)
 
-
+# define a function to count the special characters in a string
 def countSpecialChar(line):
     specialChar = 0
-    for word in (word_tokenize(line)):
+    words = word_tokenize(line) # create an array of "words" from the input string.
+                                # this function counts special characters/punctuation as words
+    for word in words:  # iterate through the array to count special characters/punctuation
         if word.startswith(".") or word.startswith("?") or word.startswith(",") or word.startswith('"') or \
                 word.startswith(":") or word.startswith("'") or word.startswith("-") or word.startswith("+") \
                 or word.startswith("=") or word.startswith("@") or word.startswith("#") or word.startswith("%"):
             specialChar += 1
     return specialChar
 
-
+# define a function to count the number of white spaces in a string
 def countWhiteSpace(line):
     whiteSpace = 0
-    lineToCheck = list(line)
-    for char in lineToCheck:
+    lineToCheck = list(line)    # parse the input line into a list of characters
+    for char in lineToCheck:    # iterate through the list to count the number that are white space
         if char == " ":
             whiteSpace += 1
     return whiteSpace
 
+# define variables necessary to define the two speakers
 count = 0
 interlocutor1 = ""
 interlocutor2 = ""
 
+# iterate through each "sentence" of the file, where sentence is an utterance by one of the speakers
 for sentence in linkedsentences:
     if len(word_tokenize(sentence)) != 0:
         if count == 0:
-            interlocutor1=word_tokenize(sentence)[0]
+            interlocutor1 = word_tokenize(sentence)[0]  # assign the first speaker's name to interlocutor1
         elif count == 2:
-            interlocutor2 = word_tokenize(sentence)[0]
+            interlocutor2 = word_tokenize(sentence)[0]  # assign the second speaker's name to interlocutor2
         elif count > 2:
-            break
+            break   # once both names have been assigned, break
     count += 1
 
+# number of turns each speaker has taken
 turns1 = 0
 turns2 = 0
-
+# number of words each speaker has uttered
 totalWords1 = 0
 totalWords2 = 0
-
+# sum of characters in all words a speaker has spoken
 totalWordLength1 = 0
 totalWordLength2 = 0
 
+# iterate through each utterance
 for sentence in linkedsentences:
-    if sentence.startswith(interlocutor1):
+    if sentence.startswith(interlocutor1):  # if the speaker was interlocutor1
         turns1 += 1
         totalWords1 = totalWords1 + len(word_tokenize(sentence)) - 1  # Minus two from the name
         totalWords1=totalWords1-countSpecialChar(sentence)
         totalWordLength1 = totalWordLength1 + (len(list(sentence))) - countWhiteSpace(sentence) - \
             countSpecialChar(sentence) - (len(interlocutor1) + 1)  # subtracting one more b/c \n char
-    elif sentence.startswith(interlocutor2):
+    elif sentence.startswith(interlocutor2):    # if the speaker was interlocutor2
         turns2 += 1
         totalWords2 = totalWords2 + len(word_tokenize(sentence)) - 1  # Minus two from the name
         totalWords2 = totalWords2 - countSpecialChar(sentence)
