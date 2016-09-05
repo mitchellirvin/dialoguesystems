@@ -1,6 +1,5 @@
 from __future__ import division
 from nltk.tokenize import word_tokenize
-
 text_file = open("script.txt", mode="r")
 linkedsentences = list(text_file)
 
@@ -50,23 +49,53 @@ totalWords2 = 0
 # sum of characters in all words a speaker has spoken
 totalWordLength1 = 0
 totalWordLength2 = 0
+# number of utterances containing "you" by each speaker
+uttersContaining1 = 0
+uttersContaining2 = 0
+# number of utterances not containing "you" by each speaker
+uttersNotContaining1 = 0
+uttersNotContaining2 = 0
+# variables to track '' in utterances
+wordToTrack = "money"
+trackUtters = 0
 
 # iterate through each utterance
 for sentence in linkedsentences:
     if sentence.startswith(interlocutor1):  # if the speaker was interlocutor1
         turns1 += 1
         totalWords1 = totalWords1 + len(word_tokenize(sentence)) - 1  # Minus two from the name
-        totalWords1=totalWords1-countSpecialChar(sentence)
+        totalWords1 = totalWords1 - countSpecialChar(sentence)
         totalWordLength1 = totalWordLength1 + (len(list(sentence))) - countWhiteSpace(sentence) - \
             countSpecialChar(sentence) - (len(interlocutor1) + 1)  # subtracting one more b/c \n char
+
+        for word in word_tokenize(sentence):
+            if word.startswith(wordToTrack):
+                trackUtters += 1
+                break
+
+        if trackUtters == 1:
+            uttersContaining1 += 1
+        else:
+            uttersNotContaining1 += 1
+        trackUtters = 0
+
     elif sentence.startswith(interlocutor2):    # if the speaker was interlocutor2
         turns2 += 1
         totalWords2 = totalWords2 + len(word_tokenize(sentence)) - 1  # Minus two from the name
         totalWords2 = totalWords2 - countSpecialChar(sentence)
         totalWordLength2 = totalWordLength2 + (len(list(sentence))) - countWhiteSpace(sentence) - \
             countSpecialChar(sentence) - (len(interlocutor2) + 1) # subtracting one more b/c \n char
-        #print(len(list(sentence)))
-        #print(len(interlocutor2))
+
+        for word in word_tokenize(sentence):
+            if word.startswith(wordToTrack):
+                trackUtters += 1
+                break
+
+        if trackUtters == 1:
+            uttersContaining2 += 1
+        else:
+            uttersNotContaining2 += 1
+        trackUtters = 0
 
 print("\n")
 
@@ -93,6 +122,16 @@ print("What is the average length of word that each interlocutor made?")
 print(interlocutor1, ": ", totalWordLength1/totalWords1)
 print(interlocutor2, ": ", totalWordLength2/totalWords2)
 
-print(totalWordLength1)
-print(totalWordLength2)
+totalContaining = uttersContaining2 + uttersContaining1
+totalNotContaining = uttersNotContaining2 + uttersNotContaining1
+
+print("\n---------------------------------------------------\nBEGIN HW 2")
+print("\t\t\t\tw/ " + wordToTrack + "\t\t\t\tw/o  " + wordToTrack + "\t\t\tTotal")
+print("Sp. 1\t\t\t" + str(uttersContaining1) + "\t\t\t\t\t" + str(uttersNotContaining1) + "\t\t\t\t\t" + str(turns1))
+print("Sp. 2\t\t\t" + str(uttersContaining2) + "\t\t\t\t\t" + str(uttersNotContaining2) + "\t\t\t\t\t" + str(turns2))
+print("Total \t\t\t" + str(uttersContaining2 + uttersContaining1) + "\t\t\t\t\t" +
+      str(uttersNotContaining1 + uttersNotContaining2))
+
+
+
 text_file.close()
