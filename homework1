@@ -1,0 +1,92 @@
+from __future__ import division
+from nltk.tokenize import word_tokenize
+
+text_file = open("script.txt", mode="r")
+linkedsentences = list(text_file)
+
+
+def countSpecialChar(line):
+    specialChar = 0
+    for word in (word_tokenize(line)):
+        if word.startswith(".") or word.startswith("?") or word.startswith(",") or word.startswith('"') or \
+                word.startswith(":") or word.startswith("'") or word.startswith("-") or word.startswith("+") \
+                or word.startswith("=") or word.startswith("@") or word.startswith("#") or word.startswith("%"):
+            specialChar += 1
+    return specialChar
+
+
+def countWhiteSpace(line):
+    whiteSpace = 0
+    lineToCheck = list(line)
+    for char in lineToCheck:
+        if char == " ":
+            whiteSpace += 1
+    return whiteSpace
+
+count = 0
+interlocutor1 = ""
+interlocutor2 = ""
+
+for sentence in linkedsentences:
+    if len(word_tokenize(sentence)) != 0:
+        if count == 0:
+            interlocutor1=word_tokenize(sentence)[0]
+        elif count == 2:
+            interlocutor2 = word_tokenize(sentence)[0]
+        elif count > 2:
+            break
+    count += 1
+
+turns1 = 0
+turns2 = 0
+
+totalWords1 = 0
+totalWords2 = 0
+
+totalWordLength1 = 0
+totalWordLength2 = 0
+
+for sentence in linkedsentences:
+    if sentence.startswith(interlocutor1):
+        turns1 += 1
+        totalWords1 = totalWords1 + len(word_tokenize(sentence)) - 1  # Minus two from the name
+        totalWords1=totalWords1-countSpecialChar(sentence)
+        totalWordLength1 = totalWordLength1 + (len(list(sentence))) - countWhiteSpace(sentence) - \
+            countSpecialChar(sentence) - (len(interlocutor1) + 1)  # subtracting one more b/c \n char
+    elif sentence.startswith(interlocutor2):
+        turns2 += 1
+        totalWords2 = totalWords2 + len(word_tokenize(sentence)) - 1  # Minus two from the name
+        totalWords2 = totalWords2 - countSpecialChar(sentence)
+        totalWordLength2 = totalWordLength2 + (len(list(sentence))) - countWhiteSpace(sentence) - \
+            countSpecialChar(sentence) - (len(interlocutor2) + 1) # subtracting one more b/c \n char
+        #print(len(list(sentence)))
+        #print(len(interlocutor2))
+
+print("\n")
+
+print("How many dialogue turns did each interlocutor make?")
+print(interlocutor1, ": ", turns1)
+print(interlocutor2, ": ", turns2)
+
+print("---------------------------------------------------")
+print("How many total words did each interlocutor say?")
+print(interlocutor1, ": ", totalWords1)
+print(interlocutor2, ": ", totalWords2)
+
+
+print("---------------------------------------------------")
+print("How many words per turn on average did each interlocutor make?")
+
+print(interlocutor1, ": ", totalWords1/turns1)
+print(interlocutor2, ": ", totalWords2/turns2)
+
+
+print("---------------------------------------------------")
+print("What is the average length of word that each interlocutor made?")
+
+print(interlocutor1, ": ", totalWordLength1/totalWords1)
+print(interlocutor2, ": ", totalWordLength2/totalWords2)
+
+print(totalWordLength1)
+print(totalWordLength2)
+text_file.close()
