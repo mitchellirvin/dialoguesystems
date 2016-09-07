@@ -3,6 +3,8 @@ import re
 from collections import Counter
 from itertools import tee, islice
 from nltk.tokenize import word_tokenize
+
+
 text_file = open("script.txt", mode="r")
 linkedsentences = list(text_file)
 
@@ -213,5 +215,7 @@ getCommonToken(speaker2Utterances)
 getCommonBigram()
 
 getNgrams(passage)
+
+
 
 text_file.close()
