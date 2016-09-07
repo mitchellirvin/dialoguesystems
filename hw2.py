@@ -17,7 +17,8 @@ def countSpecialChar(line):
     for word in words:  # iterate through the array to count special characters/punctuation
         if word.startswith(".") or word.startswith("?") or word.startswith(",") or word.startswith('"') or \
                 word.startswith(":") or word.startswith("'") or word.startswith("-") or word.startswith("+") \
-                or word.startswith("=") or word.startswith("@") or word.startswith("#") or word.startswith("%"):
+                or word.startswith("=") or word.startswith("@") or word.startswith("#") or word.startswith("%") \
+                or word.startswith('(') or word.startswith(')'):
             specialChar += 1
     return specialChar
 
