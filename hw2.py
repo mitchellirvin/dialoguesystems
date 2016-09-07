@@ -20,6 +20,7 @@ def countSpecialChar(line):
                 or word.startswith("=") or word.startswith("@") or word.startswith("#") or word.startswith("%") \
                 or word.startswith('(') or word.startswith(')'):
             specialChar += 1
+
     return specialChar
 
 # define a function to count the number of white spaces in a string
