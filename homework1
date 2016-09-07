@@ -74,6 +74,10 @@ def getFirstItem(dict):
     return maxkey, maxvalue
 
 
+def probSpeaker2Followed1(speaker2Followed1):
+    print("The probability that speaker 2 spoke next after speaker 1 has spoken is: " + str(speaker2Followed1)
+          + "/" + str(turns1))
+
 # define variables necessary to define the two speakers
 count = 0
 interlocutor1 = ""
@@ -111,11 +115,20 @@ trackUtters = 0
 # variables to separate utterances into two arrays, one for each speaker
 speaker1Utterances = ""
 speaker2Utterances = ""
+# variable to track the order of utterances
+turnFlag = True
+speaker2Followed1 = 0
+speaker1Followed2 = 0
 
 # iterate through each utterance
 for sentence in linkedsentences:
     if sentence.startswith(interlocutor1):  # if the speaker was interlocutor1
-        speaker1Utterances += sentence # add the sentence to the list of speaker 1's lines
+        # if speaker2 was the previous speaker, increment the count of speaker1followed2
+        if ~turnFlag:
+            speaker1Followed2 += 1
+            turnFlag = True
+
+        speaker1Utterances += sentence  # add the sentence to the list of speaker 1's lines
         turns1 += 1
         totalWords1 = totalWords1 + len(word_tokenize(sentence)) - 1  # Minus two from the name
         totalWords1 = totalWords1 - countSpecialChar(sentence)
@@ -141,6 +154,11 @@ for sentence in linkedsentences:
 
 
     elif sentence.startswith(interlocutor2):    # if the speaker was interlocutor2
+        # if speaker1 was the previous speaker, increment the count of speaker2followed1
+        if turnFlag:
+            speaker2Followed1 += 1
+            turnFlag = False
+
         speaker2Utterances += sentence  # add the sentence to the list of speaker 2's lines
         turns2 += 1
         totalWords2 = totalWords2 + len(word_tokenize(sentence)) - 1  # Minus two from the name
@@ -213,5 +231,7 @@ getCommonToken(speaker2Utterances)
 getCommonBigram()
 
 getNgrams(passage)
+
+probSpeaker2Followed1(speaker2Followed1)
 
 text_file.close()
