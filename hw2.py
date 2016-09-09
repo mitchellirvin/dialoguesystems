@@ -251,7 +251,7 @@ getNgrams(passage)
 text_file.close()
 
 # Printing the word counts to the csv file
-print("Writing output file...")
+print("Writing output file A...")
 with open('a.csv', 'w') as wordCounts:
     wordCounts.write("Counts,Speaker\n")
     printline = ""
@@ -270,7 +270,7 @@ with open('a.csv', 'w') as wordCounts:
 
 
 # Printing the number of utterances containing "money" to the csv file
-print("Writing output file...")
+print("Writing output file B...")
 with open('b.csv', 'w') as countMoney:
     countMoney.write("Speaker,ContainsMoney\n")
     printline = ""
@@ -281,3 +281,13 @@ with open('b.csv', 'w') as countMoney:
         printline = ""
 
     print("Done!")
+
+# Printing the contingency table for utterances containing "money" to the csv file
+print("Writing output file C...")
+with open('c.csv', 'w') as contingencyTable:
+    contingencyTable.write(",Money,NoMoney\n")
+    contingencyTable.write("Speaker1," + str(uttersContaining1) + "," + str(uttersNotContaining1) + "\n")
+    contingencyTable.write("Speaker2," + str(uttersContaining2) + "," + str(uttersNotContaining2) + "\n")
+    print("Done!")
+
+

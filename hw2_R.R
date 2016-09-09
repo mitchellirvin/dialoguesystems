@@ -62,11 +62,7 @@ hist(B,
 
 moredata <- read.csv("b.csv", header=TRUE, sep=",")
 
-# putting the number of words per utterance into a list for Speaker1 and Speaker2
-Speaker1Money <- subset(moredata, Speaker==1)$Money
-Speaker2Money <- subset(moredata, Speaker==2)$Money
+moneystuff <- table(moredata$Speaker,moredata$ContainsMoney)
+print(moneystuff)
 
-chisq.test(Speaker1Money, Speaker2Money, correct = TRUE,
-           p = rep(1/length(Speaker1Money), length(Speaker1Money)), rescale.p = FALSE,
-           simulate.p.value = FALSE, B = 2000)
-
+chisq.test(table(moneystuff))
