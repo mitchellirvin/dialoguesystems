@@ -1,5 +1,5 @@
 # set the file address: 
-#setwd("/Users//Documents/...") 
+#setwd("/Users/obadiah/dialoguesystems") 
 
 mydata <- read.csv("a.csv", header=TRUE, sep=",")
 
@@ -59,4 +59,14 @@ hist(B,
      xlim = c(0, 300.0),
      ylim = c(0, 20.0),
      breaks=length(Speaker1Counts))
+
+moredata <- read.csv("b.csv", header=TRUE, sep=",")
+
+# putting the number of words per utterance into a list for Speaker1 and Speaker2
+Speaker1Money <- subset(moredata, Speaker==1)$Money
+Speaker2Money <- subset(moredata, Speaker==2)$Money
+
+chisq.test(Speaker1Money, Speaker2Money, correct = TRUE,
+           p = rep(1/length(Speaker1Money), length(Speaker1Money)), rescale.p = FALSE,
+           simulate.p.value = FALSE, B = 2000)
 
