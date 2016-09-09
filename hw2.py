@@ -3,6 +3,8 @@ import re
 from collections import Counter
 from itertools import tee, islice
 from nltk.tokenize import word_tokenize
+import csv, os
+
 text_file = open("script.txt", mode="r")
 linkedsentences = list(text_file)
 
@@ -15,8 +17,10 @@ def countSpecialChar(line):
     for word in words:  # iterate through the array to count special characters/punctuation
         if word.startswith(".") or word.startswith("?") or word.startswith(",") or word.startswith('"') or \
                 word.startswith(":") or word.startswith("'") or word.startswith("-") or word.startswith("+") \
-                or word.startswith("=") or word.startswith("@") or word.startswith("#") or word.startswith("%"):
+                or word.startswith("=") or word.startswith("@") or word.startswith("#") or word.startswith("%") \
+                or word.startswith('(') or word.startswith(')'):
             specialChar += 1
+
     return specialChar
 
 # define a function to count the number of white spaces in a string
@@ -74,10 +78,6 @@ def getFirstItem(dict):
     return maxkey, maxvalue
 
 
-def probSpeaker2Followed1(speaker2Followed1):
-    print("The probability that speaker 2 spoke next after speaker 1 has spoken is: " + str(speaker2Followed1)
-          + "/" + str(turns1))
-
 # define variables necessary to define the two speakers
 count = 0
 interlocutor1 = ""
@@ -100,6 +100,10 @@ turns2 = 0
 # number of words each speaker has uttered
 totalWords1 = 0
 totalWords2 = 0
+
+sentenceWords1 =0
+sentenceWords2 =0
+
 # sum of characters in all words a speaker has spoken
 totalWordLength1 = 0
 totalWordLength2 = 0
@@ -115,25 +119,31 @@ trackUtters = 0
 # variables to separate utterances into two arrays, one for each speaker
 speaker1Utterances = ""
 speaker2Utterances = ""
-# variable to track the order of utterances
-turnFlag = True
-speaker2Followed1 = 0
-speaker1Followed2 = 0
+
+speaker1Counts = list()
+speaker2Counts = list()
+
+tuplist = list()
 
 # iterate through each utterance
 for sentence in linkedsentences:
     if sentence.startswith(interlocutor1):  # if the speaker was interlocutor1
-        # if speaker2 was the previous speaker, increment the count of speaker1followed2
-        if ~turnFlag:
-            speaker1Followed2 += 1
-            turnFlag = True
+        speaker1Utterances += sentence # add the sentence to the list of speaker 1's lines
 
-        speaker1Utterances += sentence  # add the sentence to the list of speaker 1's lines
+
         turns1 += 1
         totalWords1 = totalWords1 + len(word_tokenize(sentence)) - 1  # Minus two from the name
         totalWords1 = totalWords1 - countSpecialChar(sentence)
+
         totalWordLength1 = totalWordLength1 + (len(list(sentence))) - countWhiteSpace(sentence) - \
             countSpecialChar(sentence) - (len(interlocutor1) + 1)  # subtracting one more b/c \n char
+
+        # The number of words in each sentence for Speaker 1
+        sentenceWords1 = (len(word_tokenize(sentence))) - countSpecialChar(sentence) - 1  # "1" comes from the speaker name
+        print(sentenceWords1)
+
+        speaker1Counts.append(sentenceWords1)
+
 
         # count the number of utterances containing our chosen word, and not containing
         for word in word_tokenize(sentence):
@@ -143,8 +153,10 @@ for sentence in linkedsentences:
 
         if trackUtters == 1:
             uttersContaining1 += 1
+            tuplist.append(("Speaker1", 1))
         else:
             uttersNotContaining1 += 1
+            tuplist.append(("Speaker1", 0))
         trackUtters = 0
 
         # search for unigrams, bigrams, and n-grams with 'zip'
@@ -154,17 +166,19 @@ for sentence in linkedsentences:
 
 
     elif sentence.startswith(interlocutor2):    # if the speaker was interlocutor2
-        # if speaker1 was the previous speaker, increment the count of speaker2followed1
-        if turnFlag:
-            speaker2Followed1 += 1
-            turnFlag = False
-
         speaker2Utterances += sentence  # add the sentence to the list of speaker 2's lines
         turns2 += 1
         totalWords2 = totalWords2 + len(word_tokenize(sentence)) - 1  # Minus two from the name
         totalWords2 = totalWords2 - countSpecialChar(sentence)
         totalWordLength2 = totalWordLength2 + (len(list(sentence))) - countWhiteSpace(sentence) - \
             countSpecialChar(sentence) - (len(interlocutor2) + 1) # subtracting one more b/c \n char
+
+        # The number of words in each sentence for Speaker 2
+        sentenceWords2 = (len(word_tokenize(sentence))) - countSpecialChar(sentence) - 1  # "1" comes from the speaker name
+        print(sentenceWords2)
+
+        # Store the wordcount of each sentence in a list
+        speaker2Counts.append(sentenceWords2)
 
         for word in word_tokenize(sentence):
             if word.startswith(wordToTrack):
@@ -173,8 +187,10 @@ for sentence in linkedsentences:
 
         if trackUtters == 1:
             uttersContaining2 += 1
+            tuplist.append(("Speaker2", 1))
         else:
             uttersNotContaining2 += 1
+            tuplist.append(("Speaker2", 0))
         trackUtters = 0
 
 print("\n")
@@ -232,6 +248,36 @@ getCommonBigram()
 
 getNgrams(passage)
 
-probSpeaker2Followed1(speaker2Followed1)
-
 text_file.close()
+
+# Printing the word counts to the csv file
+print("Writing output file...")
+with open('a.csv', 'w') as wordCounts:
+    wordCounts.write("Counts,Speaker\n")
+    printline = ""
+
+    for value in speaker1Counts:
+        printline = str(value) + ",1\n"
+        wordCounts.write(printline)
+        printline = ""
+
+    for value in speaker2Counts:
+        printline = str(value) + ",2\n"
+        wordCounts.write(printline)
+        printline = ""
+
+    print("Done!")
+
+
+# Printing the number of utterances containing "money" to the csv file
+print("Writing output file...")
+with open('b.csv', 'w') as countMoney:
+    countMoney.write("Speaker,ContainsMoney\n")
+    printline = ""
+
+    for value in tuplist:
+        printline = str(value[0]) + "," +str(value[1]) + "\n"
+        countMoney.write(printline)
+        printline = ""
+
+    print("Done!")
