@@ -38,18 +38,13 @@ print(attributes(Speaker1Counts))
 #     ylim = c(0, 10.0),
 #    breaks=length(Speaker1Counts))
 
-
-p2 <- hist(Speaker2Counts,
-           main="Histogram of Word Counts by Both Speakers",
+Words_in_Utterance <- Speaker2Counts
+p2 <- hist(Words_in_Utterance,
            xlab="Number",
            ylab="Frequency",
-           breaks=6)
-p1 <- hist(Speaker1Counts, breaks=6)
-# print(p1)
-# print(p2)
-plot( p2, col=rgb(1,0,0,1/4), ylim=c(0,20))  # second
+           breaks=10)
+p1 <- hist(Speaker1Counts, main="Histogram of Word Counts by Both Speakers", breaks=10)
+plot( p2, col=rgb(1,0,0,1/4), ylim=c(0,30))  # second
 plot( p1, col=rgb(0,0,1,1/4), add=T)  # first histogram
-print(p1.$breaks)
-print(p2.$breaks)
 
 
