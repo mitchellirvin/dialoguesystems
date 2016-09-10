@@ -3,11 +3,7 @@ import re
 from collections import Counter
 from itertools import tee, islice
 from nltk.tokenize import word_tokenize
-<<<<<<< HEAD:hw2.py
 import csv, os
-=======
-
->>>>>>> hw2pt3:homework1
 
 text_file = open("script.txt", mode="r")
 linkedsentences = list(text_file)
@@ -127,7 +123,7 @@ speaker2Utterances = ""
 speaker1Counts = list()
 speaker2Counts = list()
 
-tuplist = list()
+
 
 # iterate through each utterance
 for sentence in linkedsentences:
@@ -157,10 +153,8 @@ for sentence in linkedsentences:
 
         if trackUtters == 1:
             uttersContaining1 += 1
-            tuplist.append(("Speaker1", 1))
         else:
             uttersNotContaining1 += 1
-            tuplist.append(("Speaker1", 0))
         trackUtters = 0
 
         # search for unigrams, bigrams, and n-grams with 'zip'
@@ -191,10 +185,8 @@ for sentence in linkedsentences:
 
         if trackUtters == 1:
             uttersContaining2 += 1
-            tuplist.append(("Speaker2", 1))
         else:
             uttersNotContaining2 += 1
-            tuplist.append(("Speaker2", 0))
         trackUtters = 0
 
 print("\n")
@@ -252,12 +244,10 @@ getCommonBigram()
 
 getNgrams(passage)
 
-
-
 text_file.close()
 
 # Printing the word counts to the csv file
-print("Writing output file A...")
+print("Writing output file...")
 with open('a.csv', 'w') as wordCounts:
     wordCounts.write("Counts,Speaker\n")
     printline = ""
@@ -273,27 +263,4 @@ with open('a.csv', 'w') as wordCounts:
         printline = ""
 
     print("Done!")
-
-
-# Printing the number of utterances containing "money" to the csv file
-print("Writing output file B...")
-with open('b.csv', 'w') as countMoney:
-    countMoney.write("Speaker,ContainsMoney\n")
-    printline = ""
-
-    for value in tuplist:
-        printline = str(value[0]) + "," +str(value[1]) + "\n"
-        countMoney.write(printline)
-        printline = ""
-
-    print("Done!")
-
-# Printing the contingency table for utterances containing "money" to the csv file
-print("Writing output file C...")
-with open('c.csv', 'w') as contingencyTable:
-    contingencyTable.write(",Money,NoMoney\n")
-    contingencyTable.write("Speaker1," + str(uttersContaining1) + "," + str(uttersNotContaining1) + "\n")
-    contingencyTable.write("Speaker2," + str(uttersContaining2) + "," + str(uttersNotContaining2) + "\n")
-    print("Done!")
-
 
