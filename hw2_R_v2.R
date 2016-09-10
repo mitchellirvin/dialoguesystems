@@ -47,4 +47,8 @@ p1 <- hist(Speaker1Counts, main="Histogram of Word Counts by Both Speakers", bre
 plot( p2, col=rgb(1,0,0,1/4), ylim=c(0,30))  # second
 plot( p1, col=rgb(0,0,1,1/4), add=T)  # first histogram
 
+moredata <- read.csv("b.csv", header=TRUE, sep=",")
+
+tbl = table(moredata$Speaker,moredata$ContainsMoney)
+chisq.test(tbl, correct = FALSE)
 
