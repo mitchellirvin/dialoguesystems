@@ -1,0 +1,7 @@
+
+a. The writeup describes the data and why the group chose to use that data.
+b. This writeup gives enough detail that I could follow it to replicate what the group did (in terms of what words they eliminated; whether they stemmed words, etc.)
+c. Overall, the writeup convinces me that the analysis the group conducted was technically sound.
+d. The writeup was well organized and readable, communicating clearly to the reader.
+e. The syntax and grammar of the writeup were clear and sound.
+	
